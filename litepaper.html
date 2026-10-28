@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hunt Hero Litepaper</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Alegreya+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a dungeon ledger. One narrow reading column; data sits in tables and flow bars, the roadmap is a real timeline. Single dark theme on purpose: it is the game's own world. */
+:root {
+  color-scheme: dark;
+  --stone: #17140f;        /* page ground: torch-lit stone */
+  --slab: #221d16;         /* raised surfaces */
+  --seam: #3a3226;         /* borders, rules */
+  --parchment: #ece3cf;    /* body text */
+  --dust: #a89a80;         /* secondary text */
+  --gold: #e8b84a;         /* $HUNT, accents */
+  --ember: #e0603a;        /* burn */
+  --pool: #5fb8a6;         /* reward pool */
+  --studio: #8f86d6;       /* studio share */
+  --f-display: "Pixelify Sans", "Courier New", monospace;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-data: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--stone);
+  color: var(--parchment);
+  font: 400 18px/1.6 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 56px 80px; display: flex; flex-direction: column; gap: 64px; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 700; text-wrap: balance; margin: 0; letter-spacing: 0.02em; }
+h1 { font-size: clamp(44px, 9vw, 76px); line-height: 1; color: var(--gold); text-shadow: 0 3px 0 #7a5a17; }
+h2 { font-size: 30px; color: var(--gold); }
+h3 { font-size: 20px; color: var(--parchment); }
+p { margin: 0; max-width: 65ch; }
+section { display: flex; flex-direction: column; gap: 18px; }
+.eyebrow { font: 600 12px/1 var(--f-data); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dust); }
+.lede { font-size: 21px; color: var(--parchment); }
+.muted { color: var(--dust); }
+a { color: var(--gold); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+code, .mono { font-family: var(--f-data); font-size: 0.86em; overflow-wrap: anywhere; }
+.wrap > *, section > *, header > * { min-width: 0; }
+
+/* hero */
+header { display: flex; flex-direction: column; gap: 22px; }
+.ca { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; background: var(--slab); border: 1px solid var(--seam); border-radius: 6px; padding: 12px 14px; }
+.ca code { word-break: break-all; color: var(--parchment); flex: 1 1 260px; }
+.ca .tag { font: 600 12px var(--f-data); color: var(--stone); background: var(--gold); padding: 3px 8px; border-radius: 3px; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn { display: inline-block; font: 700 17px var(--f-display); padding: 11px 18px; border-radius: 4px; text-decoration: none; border: 2px solid var(--gold); }
+.btn.primary { background: var(--gold); color: var(--stone); }
+.btn.ghost { color: var(--gold); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--seam); border: 1px solid var(--seam); border-radius: 6px; overflow: hidden; }
+.facts div { background: var(--slab); padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }
+.facts b { font: 600 17px var(--f-data); color: var(--parchment); font-variant-numeric: tabular-nums; }
+.facts span { font-size: 14px; color: var(--dust); }
+
+/* loop */
+.loop { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: step; }
+.loop li { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: baseline; counter-increment: step; }
+.loop li::before { content: counter(step); font: 700 18px var(--f-display); color: var(--stone); background: var(--gold); width: 28px; height: 28px; display: grid; place-items: center; border-radius: 3px; }
+
+/* flows */
+.flow { display: grid; gap: 14px; }
+.flow-row { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 14px; align-items: center; }
+.flow-row .what { font-size: 16px; }
+.flow-row .what small { display: block; color: var(--dust); font-size: 13px; }
+.bar { display: flex; height: 26px; border-radius: 3px; overflow: hidden; font: 600 12px/26px var(--f-data); color: var(--stone); }
+.bar > i { font-style: normal; text-align: center; white-space: nowrap; overflow: hidden; }
+.b-pool { background: var(--pool); } .b-burn { background: var(--ember); } .b-studio { background: var(--studio); } .b-seller { background: var(--seam); color: var(--parchment); }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 14px; color: var(--dust); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; background: var(--c); }
+@media (max-width: 560px) { .flow-row { grid-template-columns: 1fr; gap: 6px; } }
+
+/* tables */
+.tbl { overflow-x: auto; border: 1px solid var(--seam); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; font-size: 16px; }
+th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--seam); vertical-align: top; }
+th { font: 600 12px var(--f-data); letter-spacing: 0.08em; text-transform: uppercase; color: var(--dust); background: var(--slab); }
+tr:last-child td { border-bottom: 0; }
+td.n { font-family: var(--f-data); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.t0 { color: #c9c2b2; } .t1 { color: #6fb3e8; } .t2 { color: #7fd17a; } .t3 { color: #c58af0; } .t4 { color: #f0a640; } .t5 { color: #ff6f6f; }
+
+/* callout */
+.note { background: var(--slab); border: 1px solid var(--seam); border-left: 3px solid var(--pool); border-radius: 4px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.note.warn { border-left-color: var(--ember); }
+
+/* roadmap */
+.road { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.road li { display: grid; grid-template-columns: 22px 1fr; gap: 16px; }
+.road .rail { position: relative; display: flex; justify-content: center; }
+.road .rail::before { content: ""; position: absolute; top: 0; bottom: 0; width: 2px; background: var(--seam); }
+.road li:last-child .rail::before { bottom: auto; height: 14px; }
+.road .dot { position: relative; margin-top: 6px; width: 14px; height: 14px; border-radius: 2px; background: var(--stone); border: 2px solid var(--seam); }
+.road .done .dot { background: var(--gold); border-color: var(--gold); }
+.road .now .dot { background: var(--pool); border-color: var(--pool); }
+.road .body { padding-bottom: 28px; display: flex; flex-direction: column; gap: 8px; }
+.road .status { font: 600 12px var(--f-data); letter-spacing: 0.1em; text-transform: uppercase; }
+.road .done .status { color: var(--gold); } .road .now .status { color: var(--pool); } .road .later .status { color: var(--dust); }
+.road ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; color: var(--parchment); }
+.road .later ul { color: var(--dust); }
+
+footer { border-top: 1px solid var(--seam); padding-top: 22px; font-size: 14px; color: var(--dust); display: flex; flex-direction: column; gap: 8px; }
+@media (prefers-reduced-motion: no-preference) { .btn { transition: transform .15s; } .btn:hover { transform: translateY(-2px); } }
+</style>
+</head><body>
+
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">Litepaper · v1 · October 2026</span>
+  <h1>Hunt Hero</h1>
+  <p class="lede">An idle dungeon game on Solana. You collect heroes, send them into the dungeon, and they break blocks for <b style="color:var(--gold)">$HUNT</b> while you play. Every token that pays a reward came from another player's purchase, and the rules for where each token goes are written below.</p>
+  <div class="ca">
+    <span class="tag">$HUNT</span>
+    <code id="ca">Fm8vw8kduMqjiPQTz9UgXn1MZ6TF5KgCVXbxkPTjpump</code>
+  </div>
+  <div class="cta">
+    <a class="btn primary" href="https://play.playhunthero.com" target="_blank" rel="noopener">Play now</a>
+    <a class="btn ghost" href="https://pump.fun/coin/Fm8vw8kduMqjiPQTz9UgXn1MZ6TF5KgCVXbxkPTjpump" target="_blank" rel="noopener">Buy $HUNT on pump.fun</a>
+  </div>
+  <div class="facts">
+    <div><b>1,000,000,000</b><span>Fixed supply</span></div>
+    <div><b>Token-2022</b><span>Solana, 6 decimals</span></div>
+    <div><b>0</b><span>Team allocation or presale</span></div>
+    <div><b>Oct 17, 2026</b><span>Live on mainnet</span></div>
+  </div>
+</header>
+
+<section>
+  <span class="eyebrow">How it works</span>
+  <h2>The game loop</h2>
+  <ol class="loop">
+    <li><span>Buy $HUNT on pump.fun, connect your wallet in the game (MetaMask, Phantom, Solflare or Backpack) and deposit. Your wallet only asks you to approve the transfer.</span></li>
+    <li><span>Buy heroes for 25,000 $HUNT each. Each one rolls a rarity, stats and perks.</span></li>
+    <li><span>Send up to 15 heroes to hunt. They walk the dungeon and break wood, iron, gold and crystal blocks. Each block pays a fixed reward from the reward pool.</span></li>
+    <li><span>Heroes spend energy on every hit and rest to recover it. Training dummies make rest faster.</span></li>
+    <li><span>Claim your in-game balance to your wallet once it reaches 100,000 $HUNT.</span></li>
+  </ol>
+  <div class="note">
+    <b>Rewards only accrue while you are online.</b>
+    <span class="muted">Close the game and hunting stops. Energy keeps recovering for up to 12 hours while you are away, and rested heroes go back to work when you return. This keeps rewards going to people who actually play.</span>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">Tokenomics</span>
+  <h2>Where every $HUNT goes</h2>
+  <p>There is no team allocation, no presale and no pre-mined reward reserve. $HUNT launched on pump.fun with the full supply on the open market. Inside the game, every spend is split between three destinations by fixed rules.</p>
+  <div class="legend">
+    <span style="--c:var(--pool)">Reward pool: pays hunting rewards</span>
+    <span style="--c:var(--ember)">Burn: destroyed on-chain</span>
+    <span style="--c:var(--studio)">Studio: development and operations</span>
+  </div>
+  <div class="flow">
+    <div class="flow-row"><div class="what">Heroes, items, kits, dummies<small>every purchase</small></div>
+      <div class="bar"><i class="b-pool" style="width:75%">75% pool</i><i class="b-studio" style="width:20%">20%</i><i class="b-burn" style="width:5%">5</i></div></div>
+    <div class="flow-row"><div class="what">Fusion<small>fees</small></div>
+      <div class="bar"><i class="b-pool" style="width:30%">30% pool</i><i class="b-studio" style="width:20%">20%</i><i class="b-burn" style="width:50%">50% burn</i></div></div>
+    <div class="flow-row"><div class="what">Market sale<small>15% fee, seller keeps 85%</small></div>
+      <div class="bar"><i class="b-seller" style="width:85%">85% to seller</i><i class="b-pool" style="width:7.5%">7.5</i><i class="b-burn" style="width:7.5%">7.5</i></div></div>
+    <div class="flow-row"><div class="what">Early staking exit<small>penalty</small></div>
+      <div class="bar"><i class="b-pool" style="width:50%">50% pool</i><i class="b-burn" style="width:50%">50% burn</i></div></div>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">Reward pool</span>
+  <h2>Rewards come only from real spending</h2>
+  <p>The pool started at zero. It grows only when players buy heroes, items and dummies, pay fees, or trade on the market. Hunting rewards are paid out of it at fixed rates per block:</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Block</th><th>HP</th><th>Reward ($HUNT)</th></tr></thead>
+    <tbody>
+      <tr><td>Wood</td><td class="n">80</td><td class="n">35.625</td></tr>
+      <tr><td>Iron</td><td class="n">170</td><td class="n">81.25</td></tr>
+      <tr><td>Gold</td><td class="n">800</td><td class="n">406.25</td></tr>
+      <tr><td>Crystal</td><td class="n">1,300</td><td class="n">812.5</td></tr>
+      <tr><td>Prisoner cage</td><td class="n">2,000</td><td>Frees a hero (40%) or an item (60%)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">
+    <b>If the pool runs dry, rewards pause.</b>
+    <span class="muted">The game shows POOL DRY and hunting rewards stop until new spending refills it. The pool never borrows from deposits or prints tokens. Nobody can promise a return; your rewards depend on how much the community spends.</span>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">Transparency</span>
+  <h2>Deposits sit in the public Hunt Hero Treasury</h2>
+  <p>Every deposit goes to one on-chain wallet, the Hunt Hero Treasury. Anyone can check its balance at any time on Solscan:</p>
+  <div class="ca"><span class="tag">Hunt Hero Treasury</span><code>Gh1b9qDhuHmRyASrFnukCF2haQKhGDYbkLEMx1WQ6iPK</code>
+    <a href="https://solscan.io/account/Gh1b9qDhuHmRyASrFnukCF2haQKhGDYbkLEMx1WQ6iPK" target="_blank" rel="noopener">View on Solscan</a></div>
+  <ul style="margin:0;padding-left:20px;display:grid;gap:6px">
+    <li>The server checks every 10 minutes that the vault holds at least what all players are owed. If it ever does not, claims pause automatically until it does.</li>
+    <li>Deposits are credited only after the Solana transaction is finalized.</li>
+    <li>Burned $HUNT is collected and destroyed on-chain in batches. Each batch is a public burn transaction that lowers the total supply.</li>
+  </ul>
+</section>
+
+<section>
+  <span class="eyebrow">Transparency</span>
+  <h2>Who holds $HUNT</h2>
+  <p>Snapshot of Oct 20, 2026. Check the live balances on Solscan with the links below.</p>
+  <ul style="margin:0;padding-left:20px;display:grid;gap:6px">
+    <li><b>pump.fun bonding curve, 76.2%</b> (<a href="https://solscan.io/account/5zW4eoNkD3KRytXQtPEy6tGsgGufcpGQLLeEubjyDD9" target="_blank" rel="noopener">5zW4…yDD9</a>). This is the unsold supply. It belongs to the pump.fun curve contract, not to a person, and it shrinks as people buy. Sites that count it among the "top 10 holders" show a high number that is really just the curve.</li>
+    <li><b>Hunt Hero Treasury, 5.0%</b> (<a href="https://solscan.io/account/Gh1b9qDhuHmRyASrFnukCF2haQKhGDYbkLEMx1WQ6iPK" target="_blank" rel="noopener">Gh1b…iPK</a>). Player deposits and the reward pool.</li>
+    <li><b>Studio wallet, 2.6%</b> (<a href="https://solscan.io/account/Gqjsj4b6396HGxXi7QdVCHPwx4oqLJmxmC72oG7k91nv" target="_blank" rel="noopener">Gqjs…91nv</a>). The team's wallet. It receives the studio share (20% of in-game spending) when balances are settled.</li>
+    <li><b>Token settings:</b> mint authority off (no one can create new $HUNT), freeze authority off (no one can freeze your tokens), metadata locked (name and logo can't be changed).</li>
+  </ul>
+  <p>Contact: huntheroidle@gmail.com</p>
+</section>
+
+<section>
+  <span class="eyebrow">Claims</span>
+  <h2>Withdrawing to your wallet</h2>
+  <p>Minimum claim is 100,000 $HUNT. The fee depends on how many claims you made in the last 7 days, which rewards players who let their balance grow:</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Claims in the last 7 days</th><th>Fee</th></tr></thead>
+    <tbody>
+      <tr><td>1st</td><td class="n">3%</td></tr>
+      <tr><td>2nd</td><td class="n">6%</td></tr>
+      <tr><td>3rd and after</td><td class="n">9%</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">The base 3% goes to the studio. Anything above 3% goes back into the reward pool.</p>
+  <p><b>Withdrawing a deposit.</b> Claims pay out rewards. Tokens you deposited but never spent can also leave the game with <b>Withdraw deposit</b>, at a 50% fee: half goes to the reward pool and half is burned. Minimum 100,000 $HUNT.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Heroes</span>
+  <h2>Rarity and odds</h2>
+  <p>A hero costs 25,000 $HUNT. Rarity is rolled on purchase with these published odds. Higher rarity means more stats, more hits per swing, longer reach and more perks.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Rarity</th><th>Chance</th><th>Attack / Speed / Stamina</th><th>Perks</th></tr></thead>
+    <tbody>
+      <tr><td class="t0">Common</td><td class="n">82.87%</td><td class="n">1–3</td><td class="n">1</td></tr>
+      <tr><td class="t1">Rare</td><td class="n">10.36%</td><td class="n">3–6</td><td class="n">2</td></tr>
+      <tr><td class="t2">Super Rare</td><td class="n">5.18%</td><td class="n">6–9</td><td class="n">3</td></tr>
+      <tr><td class="t3">Epic</td><td class="n">1.04%</td><td class="n">9–12</td><td class="n">4</td></tr>
+      <tr><td class="t4">Legend</td><td class="n">0.51%</td><td class="n">12–15</td><td class="n">5</td></tr>
+      <tr><td class="t5">Super Legend</td><td class="n">0.04%</td><td class="n">15–18</td><td class="n">6</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Items: 5,000 $HUNT for a random slot, 6,250 for a chosen slot. Fusion combines 4 heroes into a higher rarity, up to Epic. Up to 500 heroes per wallet, 15 hunting at once.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Training dummies</span>
+  <h2>Limited supply, faster rest</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Dummy</th><th>Price ($HUNT)</th><th>Hero slots</th><th>Energy / min</th><th>Supply</th></tr></thead>
+    <tbody>
+      <tr><td>Exercise Dummy</td><td class="n">1,800,000</td><td class="n">4</td><td class="n">2</td><td class="n">1,000</td></tr>
+      <tr><td>Monk Exercise Dummy</td><td class="n">6,000,000</td><td class="n">6</td><td class="n">5</td><td class="n">250</td></tr>
+      <tr><td>Demon Exercise Dummy</td><td class="n">13,500,000</td><td class="n">8</td><td class="n">8</td><td class="n">150</td></tr>
+      <tr><td>Pharaoh Dummy</td><td class="n">24,000,000</td><td class="n">10</td><td class="n">11</td><td class="n">60</td></tr>
+      <tr><td>Ferumbras Dummy</td><td class="n">37,500,000</td><td class="n">12</td><td class="n">14</td><td class="n">20</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Maximum 2 per wallet. Like every purchase, 75% of the price goes to the reward pool and 5% is burned.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Staking</span>
+  <h2>Lock $HUNT for hero buffs</h2>
+  <p>Stake from 500,000 $HUNT for 7, 15 or 30 days. Larger stakes and longer locks give bigger stat buffs to your Super Rare and better heroes. Leaving early costs a penalty (50% at 7 days, 30% at 15, 15% at 30), split half to the pool and half to the burn.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Market and invites</span>
+  <h2>Trade and grow together</h2>
+  <ul style="margin:0;padding-left:20px;display:grid;gap:6px">
+    <li><b>Player market:</b> list heroes and items for $HUNT. The 15% fee is split half to the pool and half to the burn. Minimum prices per rarity stop dumping.</li>
+    <li><b>Invite link:</b> every player gets a personal link. For every 15 heroes bought by the players you invite, you get 1 free hero.</li>
+    <li><b>Launch promo:</b> the first 10 wallets that buy a hero get a second one free.</li>
+  </ul>
+</section>
+
+<section>
+  <span class="eyebrow">Roadmap</span>
+  <h2>What is done and what comes next</h2>
+  <ol class="road">
+    <li class="done"><div class="rail"><span class="dot"></span></div><div class="body">
+      <span class="status">Done · October 2026</span><h3>Phase 1: Core game</h3>
+      <ul><li>Dungeon hunting, energy and rest</li><li>6 rarities, perks, items and fusion</li><li>Training dummies and staking</li></ul></div></li>
+    <li class="done"><div class="rail"><span class="dot"></span></div><div class="body">
+      <span class="status">Done · October 17, 2026</span><h3>Phase 2: Mainnet launch</h3>
+      <ul><li>$HUNT on pump.fun, real deposits and claims</li><li>Public vault with automatic solvency checks</li><li>Player market, invite links, launch promo</li><li>MetaMask, Phantom, Solflare and Backpack support</li></ul></div></li>
+    <li class="now"><div class="rail"><span class="dot"></span></div><div class="body">
+      <span class="status">In progress</span><h3>Phase 3: Stability and transparency</h3>
+      <ul><li>Own domain and a dedicated always-on server</li><li>Public dashboard: live pool size, total burned, vault balance</li><li>First on-chain burn batches</li><li>Mobile layout polish</li></ul></div></li>
+    <li class="later"><div class="rail"><span class="dot"></span></div><div class="body">
+      <span class="status">Planned</span><h3>Phase 4: Community</h3>
+      <ul><li>Leaderboards and seasonal hunting events</li><li>Community prize events funded by the studio share</li><li>Content creators program</li></ul></div></li>
+    <li class="later"><div class="rail"><span class="dot"></span></div><div class="body">
+      <span class="status">Exploring</span><h3>Phase 5: On-chain heroes</h3>
+      <ul><li>Heroes and items as Solana NFTs you hold in your own wallet</li></ul></div></li>
+  </ol>
+</section>
+
+<section>
+  <span class="eyebrow">Read before you play</span>
+  <h2>Risks</h2>
+  <div class="note warn">
+    <span>Hunt Hero is a game, not an investment. $HUNT is a volatile token and can lose most or all of its value. Rewards are paid from a pool funded by player spending and can pause when the pool is empty. There are no guaranteed returns. The game is in active development, and fees and balance numbers may be tuned to keep the economy healthy. Only play with money you can afford to lose.</span>
+  </div>
+</section>
+
+<footer>
+  <span>Contract: <code>Fm8vw8kduMqjiPQTz9UgXn1MZ6TF5KgCVXbxkPTjpump</code></span>
+  <span>Play: <a href="https://play.playhunthero.com" target="_blank" rel="noopener">play.playhunthero.com</a></span>
+  <span>Community: <a href="https://t.me/+ptj8CcnlnlQ2ZGMx" target="_blank" rel="noopener">Telegram</a> · <a href="https://discord.gg/h7NdNYYCEJ" target="_blank" rel="noopener">Discord</a> · <a href="https://x.com/playHuntHero" target="_blank" rel="noopener">X</a> · <a href="https://www.tiktok.com/@hunt.hero" target="_blank" rel="noopener">TikTok</a> · Site: <a href="https://playhunthero.com" target="_blank" rel="noopener">playhunthero.com</a></span>
+</footer>
+
+</div>
+</body></html>
